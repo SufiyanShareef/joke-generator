@@ -1,12 +1,40 @@
 const jokes = [
-    "Why don’t skeletons fight each other? They don’t have the guts!",
-    "I told my wife she was drawing her eyebrows too high. She looked surprised!",
-    "Why don’t eggs tell jokes? They might crack up!",
-    "I used to play piano by ear, but now I use my hands!",
-    "What’s orange and sounds like a parrot? A carrot!"
-  ];
+  "Why don’t skeletons fight each other? They don’t have the guts!",
+  "I told my wife she was drawing her eyebrows too high. She looked surprised!",
+  "Why don’t eggs tell jokes? They might crack up!",
+  "I used to play piano by ear, but now I use my hands!",
+  "What’s orange and sounds like a parrot? A carrot!",
+  "Why did the scarecrow win an award? Because he was outstanding in his field!",
+  "Why don’t eggs tell jokes? They’d crack each other up!",
+  "I’m reading a book on anti-gravity. It’s impossible to put down!",
+  "Did you hear about the cheese factory explosion? There was nothing left but de-brie.",
+  "Why did the math book look so sad? It had too many problems.",
+  "What do you call fake spaghetti? An impasta!",
+  "I only know 25 letters of the alphabet. I don’t know Y.",
+  "Why couldn’t the bicycle stand up by itself? It was two tired!",
+  "What did the janitor say when he jumped out of the closet? Supplies!",
+  "Why don’t skeletons ever start a fight? They don’t have the guts.",
+  "I told my wife she should embrace her mistakes. She gave me a hug.",
+  "I’m reading a book on anti-gravity. It’s impossible to put down!",
+  "Why don’t scientists trust atoms? Because they make up everything.",
+  "How do you organize a space party? You planet.",
+  "What’s brown and sticky? A stick.",
+  "Why was the math teacher sad? He didn’t have enough functions.",
+  "What’s orange and sounds like a parrot? A carrot.",
+  "Why don’t oysters donate to charity? Because they’re shellfish.",
+  "What do you call a fish with no eyes? Fsh.",
+  "How do you make holy water? You boil the hell out of it.",
+  "What’s the difference between a snowman and a snowwoman? Snowballs.",
+  "Why did the golfer bring two pairs of pants? In case he got a hole in one.",
+  "Why don’t vampires attack Taylor Swift? Because she has bad blood.",
+  "Why did Hitler always keep his teacup on the right? Because he hated lefties.",
+  "What’s Hitler’s least favorite movie? Jew-rassic Park.",
+  "Why did Hitler get rejected as an artist? He could only draw the line!",
+  "Why didn’t Hitler ever win hide-and-seek? People always Nazi him.",
+  "Why did Hitler fail math class? He couldn’t handle any positive numbers.",
+];
 
-  function generateJoke() {
-    const randomIndex = Math.floor(Math.random() * jokes.length);
-    document.getElementById('joke').innerText = jokes[randomIndex];
-  }
+function generateJoke() {
+  const randomIndex = Math.floor(Math.random() * jokes.length);
+  document.getElementById('joke').innerText = jokes[randomIndex];
+}
