@@ -133,8 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             content: `${prompt} The response should be a valid JSON object with only setup and punchline properties, like this: {"setup": "the joke setup", "punchline": "the punchline"}.`
                         }
                     ],
-                    temperature: 0.7,
-                    max_tokens: 150
+                    temperature: 0.7
                 })
             });
 
@@ -142,40 +141,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const errorData = await response.json().catch(() => null);
                 throw new Error(errorData?.error?.message || `API request failed with status ${response.status}`);
             }
-
             const data = await response.json();
-
-            // Extract the content which should be our JSON string
-            const content = data.choices?.[0]?.message?.content;
-            if (!content && data.choices?.[0]?.text) {
-                content = data.choices?.[0]?.text;
-            }
-            if (!content && data.choices?.[0]) {
-                content = JSON.stringify(data.choices[0])
-            }
-            if (!content) {
-                throw new Error('Invalid API response format');
-            }
-
-            // Try to parse the JSON response
-            let joke;
-            try {
-                joke = JSON.parse(content);
-            } catch (e) {
-                const jsonMatch = content.match(/{.*}/s);
-                if (jsonMatch) {
-                    joke = JSON.parse(jsonMatch[0]);
-                } else {
-                    throw new Error('Could not extract JSON from API response');
-                }
-            }
-
-            // Validate the joke structure
-            if (!joke || typeof joke !== 'object' || !joke.setup || !joke.punchline) {
-                console.error('Invalid joke format from API', joke);
-                throw new Error('Invalid joke format from API');
-            }
-
+            const rawJoke = data.choices[0].message.content;
+            const jsonString = rawJoke.replace(/```json\s*|```/g, '').trim();
+            const joke = JSON.parse(jsonString);
+            
             return joke;
         } catch (error) {
             console.error('Error in fetchJokeFromAPI:', error);
