@@ -7,61 +7,8 @@
     <title>Laugh Factory - Your Daily Dose of Chuckles</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- <link rel="stylesheet" href="style.css"> -->
-    <style>
-        .joke-card:hover {
-            transform: translateY(-5px) rotate(1deg);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .punchline {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-        }
-
-        .punchline.show {
-            max-height: 200px;
-        }
-
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        .giggle-button:hover {
-            animation: giggle 0.3s infinite;
-        }
-
-        @keyframes giggle {
-
-            0%,
-            100% {
-                transform: rotate(0deg);
-            }
-
-            25% {
-                transform: rotate(5deg);
-            }
-
-            75% {
-                transform: rotate(-5deg);
-            }
-        }
-
-        .face {
-            transition: all 0.3s ease;
-        }
-
-        .face:hover {
-            transform: scale(1.1);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 
 <body class="bg-gradient-to-br from-purple-100 to-blue-100 min-h-screen">
@@ -116,10 +63,10 @@
                         <div class="face text-6xl">😂</div>
                     </div>
                     <div id="joke-display" class="text-xl font-medium text-gray-800 mb-4">
-                        Why don't scientists trust atoms?
+
                     </div>
-                    <div id="punchline-display" class="punchline show text-lg text-purple-600 font-semibold">
-                        Because they make up everything!
+                    <div id="punchline-display" class="punchline text-lg text-purple-600 font-semibold">
+
                     </div>
                     <button id="reveal-btn"
                         class="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-all">

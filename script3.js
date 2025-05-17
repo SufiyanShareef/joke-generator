@@ -17,6 +17,7 @@ const rateButtons = document.querySelectorAll('.rate-btn');
 const ratingFeedback = document.getElementById('rating-feedback');
 const subscribeForm = document.getElementById('subscribe-form');
 const darkModeToggle = document.getElementById('dark-mode-toggle');
+// const darkMode = document.getElementById('dark-mode');
 const confettiContainer = document.getElementById('confetti-container');
 
 function init() {
@@ -29,7 +30,7 @@ function init() {
     randomJokeBtn.addEventListener('click', getRandomJoke);
     surpriseBtn.addEventListener('click', surpriseMe);
     interactiveFace.addEventListener('click', changeFaceExpression);
-
+    document.addEventListener('DOMContentLoaded', initDarkMode);
     rateButtons.forEach(button => {
         button.addEventListener('click', () => rateJoke(button.dataset.level));
     });
@@ -39,12 +40,40 @@ function init() {
 
 }
 
+let localJokes = [];
+
+async function loadLocalJokes() {
+    if (localJokes.length > 0) return;
+    try {
+        const res = await fetch('assets/joke.json');
+        const data = await res.json()
+        localJokes = data.jokes;
+    } catch (error) {
+        console.error("service Failure.", error);
+    }
+}
+
 async function getRandomJoke() {
     //my randon joke function
     punchlineDisplay.classList.remove('show');
     revealBtn.textContent = 'Show Punchline';
     jokeDisplay.textContent = "thinking of a funny joke.....";
 
+
+    const useLocal = Math.random() < 0.9;
+
+    if (useLocal) {
+        await loadLocalJokes();
+        if (localJokes.length === 0) {
+            jokeDisplay.textContent = "Couldn't load local jokes!";
+            return;
+        }
+        const joke = localJokes[Math.floor(Math.random() * localJokes.length)];
+        jokeDisplay.textContent = joke.setup;
+        punchlineDisplay.textContent = joke.punchline;
+        return;
+    }
+    //use API 
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -57,25 +86,29 @@ async function getRandomJoke() {
                 messages: [
                     {
                         role: 'user',
-                        content: `${prompt} The response should be a valid JSON object with only setup and punchline properties, like this: {"setup": "the joke setup", "punchline": "the punchline"}.`
+                        content: 'The response should be a valid JSON object with only setup and punchline properties, like this: {"setup": "the joke setup", "punchline": "the punchline"}.'
                     }
                 ],
                 temperature: 0.7,
-
             })
         });
         if (!response.ok) throw new Error(response.statusText || "Network response was not ok");
         try {
             const data = await response.json();
+            console.log(data);
+            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                throw new Error("Invalid response format");
+            }
             const rawJoke = data.choices[0].message.content
             const jsonString = rawJoke.replace(/```json\s*|```/g, '').trim();
             const joke = JSON.parse(jsonString);
-console.log(joke)
+            console.log(joke)
             //joke 
             jokeDisplay.textContent = joke.setup;
             punchlineDisplay.textContent = joke.punchline;
         } catch (error) {
             console.error("error in getting joke from response", error);
+
             jokeDisplay.textContent = "Failed to format the joke. Try again!";
             punchlineDisplay.textContent = "";
         }
@@ -88,22 +121,54 @@ console.log(joke)
 }
 
 function surpriseMe() {
+    punchlineDisplay.classList.remove('show');
     getRandomJoke();
     //createConfetti();
 
     //code timeout 
+    // Show punchline after a delay
+    setTimeout(() => {
+        punchlineDisplay.classList.add('show');
+        revealBtn.textContent = 'Hide Punchline';
+    }, 1000);
+
+    // Change face to laughing
+    interactiveFace.textContent = "🤣";
+
+    // Show positive feedback
+    ratingFeedback.textContent = "That was a ROFL joke!";
+    ratingFeedback.classList.add('animate-bounce');
+    setTimeout(() => {
+        ratingFeedback.classList.remove('animate-bounce');
+    }, 2000);
 }
 
 function togglePunchLine() {
     //toggle punchline display
+    punchlineDisplay.classList.toggle('show');
+    revealBtn.textContent = punchlineDisplay.classList.contains('show') ? 'Hide Punchline' : 'Show Punchline';
 }
 
 function createConfetti() {
     //create confetti
 }
 
-function rateJoke() {
+function rateJoke(level) {
     //rate joke function
+    const feedback = [
+        "That joke was terrible!",
+        "Meh, could be better.",
+        "That was pretty good!",
+        "Hahaha! That was funny!",
+        "OMG I can't stop laughing!!!"
+    ];
+    ratingFeedback.textContent = feedback[level - 1];
+
+    //add animation 
+    ratingFeedback.classList.add('animate-pluse');
+    setTimeout(() => {
+        ratingFeedback.classList.remove('animate-pluse');
+    }, 500);
 }
 
 function handleSubscribe(e) {
@@ -112,12 +177,45 @@ function handleSubscribe(e) {
 
 function changeFaceExpression() {
     //change face expression
+    const randonIndex = Math.floor(Math.random() * faceExpressions.length);
+    interactiveFace.textContent = faceExpressions[randonIndex];
+
+    if (randonIndex < 6) {
+        interactiveFace.classList.add('animate-spin');
+        setTimeout(() => {
+            interactiveFace.classList.remove('animate-spin');
+        }, 1000);
+    }
 }
 
 function handleDarkModeToggle() {
-    //handle dark mode toggle
+     // Toggle dark mode class on html element
+    document.documentElement.classList.toggle('dark');
+    
+    // Update button icon and localStorage
+    const isDark = document.documentElement.classList.contains('dark');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    darkModeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    localStorage.setItem('darkMode', isDark);
 }
 
+function initDarkMode(){
+    // Initialize dark mode from localStorage
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    
+    // Check for saved preference or use system preference
+    const savedMode = localStorage.getItem('darkMode');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedMode ? savedMode === 'true' : systemPrefersDark;
+    
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    // Add event listener to toggle button
+    darkModeToggle.addEventListener('click', handleDarkModeToggle);
+}
 
 //initialize the app 
 init()
