@@ -1,16 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laugh Factory - Your Daily Dose of Chuckles</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        .joke-card:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .punchline {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .punchline.show {
+            max-height: 200px;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .giggle-button:hover {
+            animation: giggle 0.3s infinite;
+        }
+
+        @keyframes giggle {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(5deg);
+            }
+
+            75% {
+                transform: rotate(-5deg);
+            }
+        }
+
+        .face {
+            transition: all 0.3s ease;
+        }
+
+        .face:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
+
 <body class="bg-gradient-to-br from-purple-100 to-blue-100 min-h-screen">
     <div id="confetti-container"></div>
-    
+
     <header class="bg-gradient-to-r from-purple-500 to-blue-600 text-white py-6 shadow-lg">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center">
@@ -26,7 +82,8 @@
                         <button class="p-2 rounded-full hover:bg-white hover:bg-opacity-20">
                             <i class="fas fa-face-grin-tears"></i>
                         </button>
-                        <div class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
+                        <div
+                            class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg py-1 z-10 hidden group-hover:block">
                             <a href="#Dad-Jokes" class="block px-4 py-2 hover:bg-purple-100">Dad Jokes</a>
                             <a href="#" class="block px-4 py-2 hover:bg-purple-100">Puns</a>
                             <a href="#" class="block px-4 py-2 hover:bg-purple-100">Knock-Knocks</a>
@@ -41,16 +98,18 @@
         <section class="text-center mb-12">
             <h2 class="text-4xl font-bold text-purple-800 mb-4">Need a Laugh?</h2>
             <p class="text-xl text-gray-700 mb-6">We've got jokes that'll make your day brighter!</p>
-            
+
             <div class="flex justify-center space-x-4 mb-8">
-                <button id="random-joke-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full giggle-button transition-all">
+                <button id="random-joke-btn"
+                    class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full giggle-button transition-all">
                     <i class="fas fa-random mr-2"></i> Random Joke
                 </button>
-                <button id="surprise-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-full transition-all">
+                <button id="surprise-btn"
+                    class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-full transition-all">
                     <i class="fas fa-gift mr-2"></i> Surprise Me!
                 </button>
             </div>
-            
+
             <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-8">
                 <div class="p-8">
                     <div class="flex justify-center mb-6">
@@ -62,7 +121,8 @@
                     <div id="punchline-display" class="punchline show text-lg text-purple-600 font-semibold">
                         Because they make up everything!
                     </div>
-                    <button id="reveal-btn" class="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-all">
+                    <button id="reveal-btn"
+                        class="mt-6 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition-all">
                         Show Punchline
                     </button>
                 </div>
@@ -72,7 +132,8 @@
         <section class="mb-12">
             <h2 class="text-3xl font-bold text-center text-purple-800 mb-8">Joke Categories</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="joke-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 cursor-pointer">
+                <div
+                    class="joke-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 cursor-pointer">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
                             <div class="bg-purple-100 p-3 rounded-full mr-4">
@@ -81,28 +142,32 @@
                             <h3 class="text-xl font-bold text-gray-800" id="Dad-Jokes">Dad Jokes</h3>
                         </div>
                         <p class="text-gray-600 mb-4">So cringy they're funny again!</p>
-                        <button class="bg-purple-100 hover:bg-purple-200 text-purple-800 font-medium py-2 px-4 rounded-full transition-all">
+                        <button
+                            class="bg-purple-100 hover:bg-purple-200 text-purple-800 font-medium py-2 px-4 rounded-full transition-all">
                             Explore <i class="fas fa-arrow-right ml-1"></i>
                         </button>
                     </div>
                 </div>
-                
-                <div class="joke-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 cursor-pointer">
+
+                <div
+                    class="joke-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 cursor-pointer">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
                             <div class="bg-blue-100 p-3 rounded-full mr-4">
                                 <i class="fas fa-graduation-cap text-blue-600 text-xl"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-800" id = "nerd-jokes">Nerd Jokes</h3>
+                            <h3 class="text-xl font-bold text-gray-800" id="nerd-jokes">Nerd Jokes</h3>
                         </div>
                         <p class="text-gray-600 mb-4">For the intellectually hilarious</p>
-                        <button class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium py-2 px-4 rounded-full transition-all">
+                        <button
+                            class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium py-2 px-4 rounded-full transition-all">
                             Explore <i class="fas fa-arrow-right ml-1"></i>
                         </button>
                     </div>
                 </div>
-                
-                <div class="joke-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 cursor-pointer">
+
+                <div
+                    class="joke-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 cursor-pointer">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
                             <div class="bg-green-100 p-3 rounded-full mr-4">
@@ -111,7 +176,8 @@
                             <h3 class="text-xl font-bold text-gray-800">Animal Jokes</h3>
                         </div>
                         <p class="text-gray-600 mb-4">Paws-itively hilarious!</p>
-                        <button class="bg-green-100 hover:bg-green-200 text-green-800 font-medium py-2 px-4 rounded-full transition-all">
+                        <button
+                            class="bg-green-100 hover:bg-green-200 text-green-800 font-medium py-2 px-4 rounded-full transition-all">
                             Explore <i class="fas fa-arrow-right ml-1"></i>
                         </button>
                     </div>
@@ -131,11 +197,16 @@
                     <h3 class="text-2xl font-bold text-gray-800 mb-4">Rate Your Laugh</h3>
                     <p class="text-gray-600 mb-4">How hard did that joke make you laugh?</p>
                     <div class="flex justify-center space-x-2 mb-4">
-                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-red-200" data-level="1">😒</button>
-                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-yellow-200" data-level="2">😏</button>
-                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-green-200" data-level="3">😊</button>
-                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-blue-200" data-level="4">😂</button>
-                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-purple-200" data-level="5">🤣</button>
+                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-red-200"
+                            data-level="1">😒</button>
+                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-yellow-200"
+                            data-level="2">😏</button>
+                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-green-200"
+                            data-level="3">😊</button>
+                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-blue-200"
+                            data-level="4">😂</button>
+                        <button class="rate-btn p-2 rounded-full bg-gray-200 hover:bg-purple-200"
+                            data-level="5">🤣</button>
                     </div>
                     <div id="rating-feedback" class="text-center text-lg font-medium text-purple-600"></div>
                 </div>
@@ -147,8 +218,10 @@
             <p class="text-xl text-gray-700 mb-6">Subscribe to our daily joke newsletter!</p>
             <div class="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden p-6">
                 <form id="subscribe-form" class="space-y-4">
-                    <input type="email" placeholder="Your email address" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-full transition-all">
+                    <input type="email" placeholder="Your email address"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-full transition-all">
                         Send Me Jokes! <i class="fas fa-paper-plane ml-2"></i>
                     </button>
                 </form>
@@ -174,11 +247,13 @@
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400">
-                <p>&copy; 2023 Laugh Factory. All rights reserved. | <a href="#" class="hover:text-white">Privacy Policy</a> | <a href="#" class="hover:text-white">Terms of Service</a></p>
+                <p>&copy; 2023 Laugh Factory. All rights reserved. | <a href="#" class="hover:text-white">Privacy
+                        Policy</a> | <a href="#" class="hover:text-white">Terms of Service</a></p>
             </div>
         </div>
     </footer>
-<script src="script.js"></script>
-    
+    <script src="script2.js"></script>
+
 </body>
+
 </html>

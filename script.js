@@ -1,46 +1,4 @@
-const API_KEY = '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'
-// const jokes = [
-//   {
-//     setup: "Why don't scientists trust atoms?",
-//     punchline: "Because they make up everything!"
-//   },
-//   {
-//     setup: "Did you hear about the mathematician who's afraid of negative numbers?",
-//     punchline: "He'll stop at nothing to avoid them!"
-//   },
-//   {
-//     setup: "Why don't eggs tell jokes?",
-//     punchline: "They'd crack each other up!"
-//   },
-//   {
-//     setup: "How does a penguin build its house?",
-//     punchline: "Igloos it together!"
-//   },
-//   {
-//     setup: "What's the best thing about Switzerland?",
-//     punchline: "I don't know, but the flag is a big plus!"
-//   },
-//   {
-//     setup: "Why can't you explain puns to kleptomaniacs?",
-//     punchline: "They always take things literally!"
-//   },
-//   {
-//     setup: "How do you organize a space party?",
-//     punchline: "You planet!"
-//   },
-//   {
-//     setup: "Why did the scarecrow win an award?",
-//     punchline: "Because he was outstanding in his field!"
-//   },
-//   {
-//     setup: "What do you call a fake noodle?",
-//     punchline: "An impasta!"
-//   },
-//   {
-//     setup: "How do you make a tissue dance?",
-//     punchline: "Put a little boogie in it!"
-//   }
-//];
+const API_KEY = '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'
 
 // Interactive face expressions
 const faceExpressions = ["😂", "🤣", "😆", "😅", "🤪", "😜", "🤨", "😏", "😒", "🙄"];
@@ -99,7 +57,6 @@ async function getRandomJoke() {
       headers: {
         "Authorization": `Bearer ${API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": window.location.href,
         "X-Title": "Joke Generator",
         "Accept": "application/json",
       },
@@ -108,14 +65,14 @@ async function getRandomJoke() {
         messages: [
           {
             role: "system",
-            content: "You are a helpful assistant that tells funny jokes. Respond with ONLY a JSON object containing setup and punchline properties. Example: {\"setup\": \"Why did the chicken cross the road?\", \"punchline\": \"To get to the other side!\"}. Do not include any additional text, explanations, or code formatting."
+            content: "You are a comedy AI that ONLY responds with JSON jokes. Your output MUST be: {\"setup\":\"joke setup\",\"punchline\":\"punchline\"} with no other text, formatting, or commentary or explaination. Never use markdown or code blocks."
           },
           {
             role: "user",
             content: "Tell me a random joke in the exact specified JSON format."
           }
         ],
-        temperature: 0.7,
+        temperature: 0.3,
         response_format: { type: "json_object" }
       })
     });
@@ -126,26 +83,45 @@ async function getRandomJoke() {
     // console.log("Raw response text:", rawText);
 
     // First parse the whole response
-    const data = await res.json();
-    let content = data.choices[0].message.content;
+    const data = await res.text();
+    console.log("raw data",data);
+    let content = data.choices[0]?.message?.content;
 
-    // if (!content) throw new Error("No joke content received.");
-    try {
-      const jokeContent = content.replace(/```json/g, '').replace(/```/g, '').trim();
-      const joke = JSON.parse(jokeContent);
+    let joke = {
+      setup: 'Why did the JSON parser fail?',
+      punchline: "Because it couldn't handle the 'humerus' error!"
+    };
 
-      if (!joke.setup || !joke.punchline) {
-        throw new Error("Invalid joke format");
-      }
-      jokeDisplay.textContent = joke.setup;
-      punchlineDisplay.textContent = joke.punchline;
-    } catch (error) {
-      console.error('error parsing joke:', error);
-      joke = {
-        setup: 'Why did the JSON parser fail?',
-        punchline: "Because it couldn't handle the 'humerus' error!"
+    if (content) {
+      try {
+        // Remove any code block markers and trim whitespace
+        const cleanedContent = content.replace(/```(json)?/g, '').trim();
+
+        // Try to parse as JSON
+        const parsedJoke = JSON.parse(cleanedContent);
+
+        // Verify the parsed object has required properties
+        if (parsedJoke.setup && parsedJoke.punchline) {
+          joke = parsedJoke;
+        }
+      } catch (error) {
+        console.error('Error parsing joke:', error);
+
+        // Fallback: Try to extract setup and punchline using regex if JSON parse fails
+        const setupMatch = content.match(/"setup":\s*"([^"]+)"/) || content.match(/setup[": ]+"([^"]+)"/i);
+        const punchlineMatch = content.match(/"punchline":\s*"([^"]+)"/) || content.match(/punchline[": ]+"([^"]+)"/i);
+
+        if (setupMatch && punchlineMatch) {
+          joke = {
+            setup: setupMatch[1],
+            punchline: punchlineMatch[1]
+          };
+        }
       }
     }
+    console.log(joke);
+    jokeDisplay.textContent = joke.setup;
+    punchlineDisplay.textContent = joke.punchline;
 
   } catch (err) {
     console.error("Error fetching joke:", err);
