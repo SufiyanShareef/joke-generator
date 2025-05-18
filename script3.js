@@ -122,7 +122,7 @@ async function getRandomJoke() {
 function surpriseMe() {
     punchlineDisplay.classList.remove('show');
     getRandomJoke();
-    //createConfetti();
+    createConfetti();
 
     //code timeout 
     // Show punchline after a delay
@@ -150,15 +150,19 @@ function togglePunchLine() {
 
 function createConfetti() {
     //create confetti
-    confettiContainer.innerHTML ='';
+    confettiContainer.innerHTML = '';
 
-    for (let i = 0; i< 50; i++) {
+    for (let i = 0; i < 50; i++) {
         const confetti = document.createElement('div');
-        confetti.className.add('confetti');
+        confetti.classList.add('confetti');
 
         // random position 
-        const colors = ['#f00',"#0f0",'#00f','#ff0','#f0f','#0ff'];
+        const xPos = Math.random() * window.innerWidth;
 
+        // Random color 
+        const colors = ['#f00', "#0f0", '#00f', '#ff0', '#f0f', '#0ff'];
+        
+        //set Size
         const size = Math.floor(Math.random() * 10) + 5;
 
         //set style
@@ -180,7 +184,7 @@ function createConfetti() {
         const keyframes = `
                         @keyframes fall {
                         to {
-                            transform: translateY(${window.innerHeight + 10}px) rotate(${Math.random() *360}deg);
+                            transform: translateY(${window.innerHeight + 10}px) rotate(${Math.random() * 360}deg);
                             opacity: 0;
                         }
                     }
@@ -192,9 +196,9 @@ function createConfetti() {
             document.head.appendChild(style);
         }
     }
-    setTimeout(()=>{
+    setTimeout(() => {
         confettiContainer.innerHTML = '';
-    },5000);
+    }, 8000);
 }
 
 function rateJoke(level) {
@@ -233,7 +237,7 @@ function handleSubscribe(e) {
 
     // Let Netlify handle the submission
     e.target.submit();
-    
+
     // Optional: Show success message
     alert('Thanks for subscribing!');
     e.target.reset();
@@ -253,9 +257,9 @@ function changeFaceExpression() {
 }
 
 function handleDarkModeToggle() {
-     // Toggle dark mode class on html element
+    // Toggle dark mode class on html element
     document.documentElement.classList.toggle('dark');
-    
+
     // Update button icon and localStorage
     const isDark = document.documentElement.classList.contains('dark');
     const darkModeToggle = document.getElementById('dark-mode-toggle');
@@ -263,20 +267,20 @@ function handleDarkModeToggle() {
     localStorage.setItem('darkMode', isDark);
 }
 
-function initDarkMode(){
+function initDarkMode() {
     // Initialize dark mode from localStorage
     const darkModeToggle = document.getElementById('dark-mode-toggle');
-    
+
     // Check for saved preference or use system preference
     const savedMode = localStorage.getItem('darkMode');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isDark = savedMode ? savedMode === 'true' : systemPrefersDark;
-    
+
     if (isDark) {
         document.documentElement.classList.add('dark');
         darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
     }
-    
+
     // Add event listener to toggle button
     darkModeToggle.addEventListener('click', handleDarkModeToggle);
 }
