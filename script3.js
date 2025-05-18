@@ -151,6 +151,15 @@ function togglePunchLine() {
 
 function createConfetti() {
     //create confetti
+    confettiContainer.innerHTML ='';
+
+    for (let i = 0; i< 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className.add('confetti');
+
+        // random position 
+        
+    }
 }
 
 function rateJoke(level) {
@@ -173,6 +182,26 @@ function rateJoke(level) {
 
 function handleSubscribe(e) {
     //handle subscribe form
+    e.preventDefault(); // Prevent the default form submission
+
+    const form = e.target;
+    const emailInput = form.querySelector('input[type="email"]');
+    const email = emailInput.value.trim();
+    console.log(email)
+
+    // Basic email format validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+
+    // Let Netlify handle the submission
+    e.target.submit();
+    
+    // Optional: Show success message
+    alert('Thanks for subscribing!');
+    e.target.reset();
 }
 
 function changeFaceExpression() {

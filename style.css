@@ -76,13 +76,13 @@
 .dark .bg-purple-100,
 .dark .bg-blue-100,
 .dark .bg-green-100 {
-    background-color: #374151;
+    background-color: #2a303a;
 }
 
 .dark .text-purple-600,
 .dark .text-blue-600,
 .dark .text-green-600 {
-    color: #a5b4fc;
+    color: hsla(193, 91%, 36%, 0.634);
 }
 
 .dark .bg-purple-100:hover,
@@ -119,4 +119,16 @@
 
 .dark .shadow-md {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark button.text-green-800{
+  color: #36b736;
+}
+
+.dark button.text-blue-800{
+  color: #1398f1;
+}
+
+.dark p.text-gray-600{
+  color:rgb(198 202 207)
 }
