@@ -1,7 +1,6 @@
-//MODEL API AND URL
-const API_KEY = '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';
-const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'deepseek/deepseek-r1:free';
+API_KEY = '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';
+API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+MODEL = 'deepseek/deepseek-r1:free';
 
 // Interactive face expressions
 const faceExpressions = ["😂", "🤣", "😆", "😅", "🤪", "😜", "🤨", "😏", "😒", "🙄"];
@@ -60,7 +59,7 @@ async function getRandomJoke() {
     jokeDisplay.textContent = "thinking of a funny joke.....";
 
 
-    const useLocal = Math.random() < 0.9;
+    const useLocal = Math.random() < 0.5;
 
     if (useLocal) {
         await loadLocalJokes();
@@ -158,8 +157,44 @@ function createConfetti() {
         confetti.className.add('confetti');
 
         // random position 
-        
+        const colors = ['#f00',"#0f0",'#00f','#ff0','#f0f','#0ff'];
+
+        const size = Math.floor(Math.random() * 10) + 5;
+
+        //set style
+        confetti.style.left = `${xPos}px`;
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+
+        const animationDuration = Math.random() * 3 + 2;
+        const animationDelay = Math.random() * 2;
+
+        confetti.style.animation = `fall ${animationDuration}s ease-in ${animationDelay}s forwards`;
+
+        //add to conatainer
+        confettiContainer.appendChild(confetti);
+
+        //create key frame for animation
+        const keyframes = `
+                        @keyframes fall {
+                        to {
+                            transform: translateY(${window.innerHeight + 10}px) rotate(${Math.random() *360}deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+        if (!document.getElementById('confetti-aimation')) {
+            const style = document.createElement('style');
+            style.id = 'confetti-aimation';
+            style.innerHTML = keyframes;
+            document.head.appendChild(style);
+        }
     }
+    setTimeout(()=>{
+        confettiContainer.innerHTML = '';
+    },5000);
 }
 
 function rateJoke(level) {
