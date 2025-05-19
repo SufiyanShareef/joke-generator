@@ -1,7 +1,3 @@
-API_KEY = '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';
-API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-MODEL = 'deepseek/deepseek-r1:free';
-
 // Interactive face expressions
 const faceExpressions = ["😂", "🤣", "😆", "😅", "🤪", "😜", "🤨", "😏", "😒", "🙄"];
 
@@ -19,6 +15,7 @@ const darkModeToggle = document.getElementById('dark-mode-toggle');
 // const darkMode = document.getElementById('dark-mode');
 const confettiContainer = document.getElementById('confetti-container');
 
+// initial function 
 function init() {
     // starting function
     // Hide punchline initially
@@ -39,80 +36,24 @@ function init() {
 
 }
 
-let localJokes = [];
-
-async function loadLocalJokes() {
-    if (localJokes.length > 0) return;
-    try {
-        const res = await fetch('assets/joke.json');
-        const data = await res.json()
-        localJokes = data.jokes;
-    } catch (error) {
-        console.error("service Failure.", error);
-    }
-}
-
 async function getRandomJoke() {
     //my randon joke function
     punchlineDisplay.classList.remove('show');
     revealBtn.textContent = 'Show Punchline';
     jokeDisplay.textContent = "thinking of a funny joke.....";
 
+    try {
+        const res = await fetch('http://localhost:8000/api/joke', { method: 'GET' });
+        const joke = await res.json();
 
-    const useLocal = Math.random() < 0.5;
-
-    if (useLocal) {
-        await loadLocalJokes();
-        if (localJokes.length === 0) {
-            jokeDisplay.textContent = "Couldn't load local jokes!";
-            return;
+        if (!joke || !joke.setup || !joke.punchline) {
+            throw new Error("Invalid joke format");
         }
-        const joke = localJokes[Math.floor(Math.random() * localJokes.length)];
         jokeDisplay.textContent = joke.setup;
         punchlineDisplay.textContent = joke.punchline;
-        return;
+        console.log("API Fetching sucessfull");
     }
-    //use API 
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
-            },
-            body: JSON.stringify({
-                model: MODEL,
-                messages: [
-                    {
-                        role: 'user',
-                        content: 'The response should be a valid JSON object with only setup and punchline properties, like this: {"setup": "the joke setup", "punchline": "the punchline"}.'
-                    }
-                ],
-                temperature: 0.7,
-            })
-        });
-        if (!response.ok) throw new Error(response.statusText || "Network response was not ok");
-        try {
-            const data = await response.json();
-            console.log(data);
-            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-                throw new Error("Invalid response format");
-            }
-            const rawJoke = data.choices[0].message.content
-            const jsonString = rawJoke.replace(/```json\s*|```/g, '').trim();
-            const joke = JSON.parse(jsonString);
-            console.log(joke)
-            //joke 
-            jokeDisplay.textContent = joke.setup;
-            punchlineDisplay.textContent = joke.punchline;
-        } catch (error) {
-            console.error("error in getting joke from response", error);
-
-            jokeDisplay.textContent = "Failed to format the joke. Try again!";
-            punchlineDisplay.textContent = "";
-        }
-
-    } catch (error) {
+    catch (error) {
         console.error("error in getting joke from the API", error);
         jokeDisplay.textContent = "Failed to think of a joke. Try again!";
         punchlineDisplay.textContent = "";
@@ -161,7 +102,7 @@ function createConfetti() {
 
         // Random color 
         const colors = ['#f00', "#0f0", '#00f', '#ff0', '#f0f', '#0ff'];
-        
+
         //set Size
         const size = Math.floor(Math.random() * 10) + 5;
 
