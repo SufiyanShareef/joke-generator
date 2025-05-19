@@ -14,6 +14,7 @@ const subscribeForm = document.getElementById('subscribe-form');
 const darkModeToggle = document.getElementById('dark-mode-toggle');
 // const darkMode = document.getElementById('dark-mode');
 const confettiContainer = document.getElementById('confetti-container');
+const baseURL = "https://joke-api-yqbz.onrender.com";
 
 // initial function 
 function init() {
@@ -43,7 +44,7 @@ async function getRandomJoke() {
     jokeDisplay.textContent = "thinking of a funny joke.....";
 
     try {
-        const res = await fetch('http://localhost:8000/api/joke', { method: 'GET' });
+        const res = await fetch(`${baseURL}/api/joke`, { method: 'GET' });
         const joke = await res.json();
 
         if (!joke || !joke.setup || !joke.punchline) {
@@ -176,7 +177,7 @@ async function handleSubscribe(e) {
         return;
     }
     try {
-        const res = await fetch ('http://localhost:8000/api/subscribe', {
+        const res = await fetch (`${baseURL}/api/subscribe`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
