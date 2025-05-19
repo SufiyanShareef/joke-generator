@@ -160,7 +160,7 @@ function rateJoke(level) {
     }, 500);
 }
 
-function handleSubscribe(e) {
+async function handleSubscribe(e) {
     //handle subscribe form
     e.preventDefault(); // Prevent the default form submission
 
@@ -175,13 +175,31 @@ function handleSubscribe(e) {
         alert('Please enter a valid email address.');
         return;
     }
+    try {
+        const res = await fetch ('http://localhost:8000/api/subscribe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: email })
+        });
+        const result = await res.json();
+        if(res.ok){
+            alert('You have been subscribed to our newsletter!');
+            form.reset();
+        } else{
+            alert(result.error || 'subscription failed.');
+        } 
+    } catch (error) {
+        console.error('subscription failed:', error);
+        alert('an error occurred. please try again later.');
+    }
+    // // Let Netlify handle the submission
+    // e.target.submit();
 
-    // Let Netlify handle the submission
-    e.target.submit();
-
-    // Optional: Show success message
-    alert('Thanks for subscribing!');
-    e.target.reset();
+    // // Optional: Show success message
+    // alert('Thanks for subscribing!');
+    // e.target.reset();
 }
 
 function changeFaceExpression() {
