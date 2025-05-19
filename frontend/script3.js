@@ -52,7 +52,6 @@ async function getRandomJoke() {
         }
         jokeDisplay.textContent = joke.setup;
         punchlineDisplay.textContent = joke.punchline;
-        console.log("API Fetching sucessfull");
     }
     catch (error) {
         console.error("error in getting joke from the API", error);
