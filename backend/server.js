@@ -13,6 +13,10 @@ const API_URL = process.env.API_URL;
 const API_KEY = process.env.API_KEY;
 const MODEL = process.env.MODEL;
 
+if (!API_KEY){
+  console.log("no api key");
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
